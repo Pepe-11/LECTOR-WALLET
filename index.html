@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro y Acceso - Empresa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Acceso Empleados</h2>
+        
+        <div id="loginForm">
+            <input type="text" id="nombre" placeholder="Nombre de usuario" class="w-full p-2 mb-4 border rounded">
+            <input type="password" id="pass" placeholder="Contraseña" class="w-full p-2 mb-4 border rounded">
+            
+            <button onclick="login()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition">Entrar</button>
+            <button onclick="verUsuarios()" class="w-full mt-2 text-sm text-gray-500 hover:underline">Ver usuarios registrados</button>
+        </div>
+
+        <div id="walletSection" class="hidden text-center">
+            <p class="mb-4">Bienvenido, <span id="userName" class="font-bold"></span></p>
+            <div id="qrcode" class="flex justify-center mb-4">
+                </div>
+            <button onclick="descargarWallet()" class="bg-black text-white px-4 py-2 rounded-xl flex items-center justify-center w-full">
+                <span>Generar Digital Pass</span>
+            </button>
+        </div>
+        
+        <div id="status" class="mt-4 text-center text-sm"></div>
+    </div>
+
+    <script>
+        // URL de tu Web App de Google Apps Script
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDXq1sfRt7FuVoa4DK0M2JUcxUHeo_w0ZagFD3tYg1fxDqjL7OMe61B1T2yrGKjErqrw/exec";
+
+        async function login() {
+            const nombre = document.getElementById('nombre').value;
+            const pass = document.getElementById('pass').value;
+            
+            // Llamada al backend (Google Sheets)
+            const response = await fetch(`${SCRIPT_URL}?action=login&user=${nombre}&pass=${pass}`);
+            const data = await response.json();
+
+            if(data.success) {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('walletSection').classList.remove('hidden');
+                document.getElementById('userName').innerText = nombre;
+                generarQR(nombre);
+            } else {
+                document.getElementById('status').innerText = "❌ Usuario o contraseña incorrectos";
+            }
+        }
+
+        function generarQR(texto) {
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${texto}`;
+            document.getElementById('qrcode').innerHTML = `<img src="${qrUrl}" alt="QR de fichaje">`;
+        }
+
+        async function verUsuarios() {
+            const response = await fetch(`${SCRIPT_URL}?action=list`);
+            const data = await response.json();
+            alert("Usuarios registrados: " + data.users.join(", "));
+        }
+    </script>
+</body>
+</html>
