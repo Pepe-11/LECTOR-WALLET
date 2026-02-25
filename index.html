@@ -258,8 +258,8 @@
      ✏️  CONFIGURA AQUÍ TUS VALORES
   ═══════════════════════════════════════════ */
   const TARGET_URL  = "https://soporteapp.gcalidad.com";       // ← URL destino
-  const ALLOWED_LAT = 0;           // ← Latitud del lugar permitido
-  const ALLOWED_LNG = 0;          // ← Longitud del lugar permitido
+  const ALLOWED_LAT = 00.000000;           // ← Latitud del lugar permitido
+  const ALLOWED_LNG = -00.000000;          // ← Longitud del lugar permitido
   const RADIUS_M    = 200;                 // ← Radio permitido en metros
   /* ═══════════════════════════════════════════ */
 
@@ -334,8 +334,20 @@
     status.className = '';
     await delay(600);
 
-    const { latitude, longitude } = position.coords;
+    const { latitude, longitude, accuracy } = position.coords;
     const distance = haversineDistance(latitude, longitude, ALLOWED_LAT, ALLOWED_LNG);
+
+    // Debug: muestra en consola los valores reales
+    console.log(`📍 Tu ubicación: ${latitude}, ${longitude}`);
+    console.log(`🎯 Ubicación permitida: ${ALLOWED_LAT}, ${ALLOWED_LNG}`);
+    console.log(`📏 Distancia calculada: ${Math.round(distance)} m`);
+    console.log(`✅ Radio permitido: ${RADIUS_M} m`);
+    console.log(`📡 Precisión del GPS: ${Math.round(accuracy)} m`);
+
+    // Muestra también en pantalla para pruebas
+    status.textContent = `Distancia: ${Math.round(distance)}m | Precisión GPS: ${Math.round(accuracy)}m`;
+
+    await delay(1500); // pausa para que puedas leer el valor
 
     if (distance > RADIUS_M) {
       setStep('s3', 'fail');
