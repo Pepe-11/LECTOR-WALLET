@@ -191,6 +191,24 @@
     }
     #user-input::placeholder { color: var(--muted); }
 
+
+    #continue-btn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border: none;
+      border-radius: 10px;
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    #continue-btn:hover { opacity: 0.85; }
+    #continue-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
     #debug-box {
       display: none;
       margin-top: 16px;
@@ -224,15 +242,17 @@
     <div class="icon-inner">🔐</div>
   </div>
 
-  <div id="session-badge">⚡ Sesión activa — <span id="session-timer"></span></div>
+  <div id="session-badge">⚡ <span id="session-user"></span> — <span id="session-timer"></span></div>
 
   <h1>Verificando acceso</h1>
   <p id="status">Iniciando...</p>
 
   <!-- Campo de nombre/ID de usuario -->
   <div id="user-section">
-    <label for="user-input">Tu nombre o ID (opcional)</label>
-    <input type="text" id="user-input" placeholder="Ej: Juan / Empleado 03" maxlength="50" />
+    <label for="user-input">Tu nombre o ID <span style="color:var(--error)">*</span></label>
+    <input type="text" id="user-input" placeholder="Ej: Juan / Empleado 03" maxlength="50" autocomplete="off" />
+    <p id="name-error" style="display:none;color:var(--error);font-size:0.72rem;margin-top:6px;font-family:'Space Mono',monospace;">Introduce tu nombre para continuar.</p>
+    <button id="continue-btn" onclick="confirmName()">Continuar &rarr;</button>
   </div>
 
   <div class="progress-wrap">
@@ -261,10 +281,10 @@
      ✏️  CONFIGURA AQUÍ TUS VALORES
   ═══════════════════════════════════════════ */
   const TARGET_URL      = "https://soporteapp.gcalidad.com";          // ← URL destino
-  const ALLOWED_LAT     = 37.900107;              // ← Latitud del lugar permitido
-  const ALLOWED_LNG     = -4.733545;             // ← Longitud del lugar permitido
+  const ALLOWED_LAT     = 37.900105;              // ← Latitud del lugar permitido
+  const ALLOWED_LNG     = -4.733541;             // ← Longitud del lugar permitido
   const RADIUS_M        = 200;                    // ← Radio permitido en metros
-  const SESSION_MINUTES = 5;                      // ← Minutos de sesión válida
+  const SESSION_MINUTES = 1;                      // ← Minutos de sesión válida
   const WEBHOOK_URL     = "https://script.google.com/macros/s/AKfycbzW2r-cZLhoG7femt33oFJbUkBKdjZkfjDUxRK3NcYwzHdk65kaypsF5gAIIhY8Nw5xpA/exec";  // ← URL del Google Apps Script desplegado
 
   // true = muestra panel de debug en pantalla | false = producción
@@ -371,7 +391,33 @@
     }
   }
 
-  // ── Flujo principal ──
+  // ── Nombre obligatorio: pausa el flujo hasta que el usuario confirme ──
+  let _nameResolve = null;
+
+  function waitForName() {
+    return new Promise(resolve => { _nameResolve = resolve; });
+  }
+
+  function confirmName() {
+    const val = document.getElementById('user-input').value.trim();
+    const errEl = document.getElementById('name-error');
+    if (!val) {
+      errEl.style.display = 'block';
+      document.getElementById('user-input').focus();
+      return;
+    }
+    errEl.style.display = 'none';
+    if (_nameResolve) { _nameResolve(); _nameResolve = null; }
+  }
+
+  // Permitir confirmar con Enter
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('user-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') confirmName();
+    });
+  });
+
+    // ── Flujo principal ──
   async function run() {
 
     // Paso 1: Verificar sesión existente
@@ -403,6 +449,7 @@
         timer.textContent = formatTimeLeft(left);
       }, 1000);
 
+      document.getElementById('session-user').textContent = '⚡ ' + (session.user || 'Usuario') + ' — sesión activa';
       setStatus(`Sesión activa. Redirigiendo...`, 'ok');
       setStep('s5', 'active');
       await delay(1200);
@@ -416,11 +463,16 @@
     setStep('s1', 'done');
     setProgress(20);
 
-    // Mostrar campo de nombre/ID
+    // Mostrar campo de nombre/ID y esperar a que el usuario lo rellene
     document.getElementById('user-section').style.display = 'block';
+    setStatus('Introduce tu nombre para continuar.', 'warn');
+
+    // Esperar confirmación del nombre (resuelve la promesa cuando el usuario pulsa el botón)
+    await waitForName();
 
     // Paso 2: GPS
     setStep('s2', 'active');
+    document.getElementById('user-section').style.display = 'none';
     setStatus('Toca "Permitir" cuando el navegador pida tu ubicación...', 'warn');
     setProgress(35);
     await delay(300);
@@ -489,7 +541,7 @@
     setStep('s4', 'active');
     setStatus('Registrando acceso...');
 
-    const userName = document.getElementById('user-input').value.trim() || 'Anónimo';
+    const userName = document.getElementById('user-input').value.trim();
     const now      = new Date();
     const datetime = now.toLocaleString('es-ES', {
       day: '2-digit', month: '2-digit', year: 'numeric',
