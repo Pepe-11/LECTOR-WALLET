@@ -44,12 +44,10 @@
     body::after {
       content: '';
       position: fixed;
-      width: 600px;
-      height: 600px;
+      width: 600px; height: 600px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(0,85,255,0.12) 0%, transparent 70%);
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
     }
@@ -67,14 +65,12 @@
     }
 
     .icon-wrap {
-      width: 72px;
-      height: 72px;
+      width: 72px; height: 72px;
       margin: 0 auto 28px;
       position: relative;
     }
     .icon-ring {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       border-radius: 50%;
       border: 2px solid transparent;
       background: linear-gradient(var(--surface), var(--surface)) padding-box,
@@ -82,22 +78,17 @@
       animation: spin 2.4s linear infinite;
     }
     .icon-inner {
-      position: absolute;
-      inset: 10px;
+      position: absolute; inset: 10px;
       border-radius: 50%;
       background: linear-gradient(135deg, rgba(0,240,160,0.15), rgba(0,85,255,0.15));
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 22px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     h1 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      font-size: 1.4rem; font-weight: 800;
+      letter-spacing: -0.02em; margin-bottom: 8px;
     }
 
     #status {
@@ -116,12 +107,10 @@
       margin: 28px 0 20px;
       height: 3px;
       background: rgba(255,255,255,0.06);
-      border-radius: 99px;
-      overflow: hidden;
+      border-radius: 99px; overflow: hidden;
     }
     .progress-bar {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       border-radius: 99px;
       background: linear-gradient(90deg, var(--accent2), var(--accent));
       transition: width 0.4s ease;
@@ -129,43 +118,78 @@
     }
 
     .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      text-align: left;
+      display: flex; flex-direction: column;
+      gap: 10px; text-align: left;
     }
     .step {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      transition: color 0.3s;
+      display: flex; align-items: center;
+      gap: 12px; font-size: 0.82rem;
+      color: var(--muted); transition: color 0.3s;
     }
     .step.active { color: var(--text); }
     .step.done   { color: var(--accent); }
     .step.fail   { color: var(--error); }
+    .step.skip   { color: var(--muted); opacity: 0.5; }
 
     .step-dot {
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       border-radius: 50%;
       border: 1.5px solid currentColor;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 10px;
-      transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 10px; transition: all 0.3s;
     }
     .step.active .step-dot { animation: pulse-dot 1s ease-in-out infinite; }
     .step.done .step-dot   { background: var(--accent); border-color: var(--accent); color: #000; }
     .step.fail .step-dot   { background: var(--error);  border-color: var(--error);  color: #fff; }
+    .step.skip .step-dot   { background: var(--muted);  border-color: var(--muted);  color: #000; }
 
     @keyframes pulse-dot {
       0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
       50%       { box-shadow: 0 0 0 5px transparent; opacity: 0.7; }
     }
+
+    /* Sesión activa badge */
+    #session-badge {
+      display: none;
+      margin-bottom: 20px;
+      padding: 8px 14px;
+      background: rgba(0,240,160,0.08);
+      border: 1px solid rgba(0,240,160,0.2);
+      border-radius: 99px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+    }
+
+    /* User input */
+    #user-section {
+      display: none;
+      margin-bottom: 24px;
+    }
+    #user-section label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-align: left;
+      font-family: 'Space Mono', monospace;
+    }
+    #user-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    #user-input:focus {
+      border-color: rgba(0,240,160,0.4);
+    }
+    #user-input::placeholder { color: var(--muted); }
 
     #debug-box {
       display: none;
@@ -183,17 +207,12 @@
 
     #error-block {
       display: none;
-      margin-top: 24px;
-      padding: 16px;
+      margin-top: 24px; padding: 16px;
       background: rgba(255,59,92,0.08);
       border: 1px solid rgba(255,59,92,0.2);
       border-radius: 10px;
     }
-    #error-block p {
-      font-size: 0.82rem;
-      color: var(--error);
-      line-height: 1.5;
-    }
+    #error-block p { font-size: 0.82rem; color: var(--error); line-height: 1.5; }
     #error-block .err-icon { font-size: 1.4rem; margin-bottom: 6px; }
   </style>
 </head>
@@ -205,30 +224,27 @@
     <div class="icon-inner">🔐</div>
   </div>
 
+  <div id="session-badge">⚡ Sesión activa — <span id="session-timer"></span></div>
+
   <h1>Verificando acceso</h1>
   <p id="status">Iniciando...</p>
+
+  <!-- Campo de nombre/ID de usuario -->
+  <div id="user-section">
+    <label for="user-input">Tu nombre o ID (opcional)</label>
+    <input type="text" id="user-input" placeholder="Ej: Juan / Empleado 03" maxlength="50" />
+  </div>
 
   <div class="progress-wrap">
     <div class="progress-bar" id="progress"></div>
   </div>
 
   <div class="steps">
-    <div class="step" id="s1">
-      <div class="step-dot">1</div>
-      <span>Verificando conexión</span>
-    </div>
-    <div class="step" id="s2">
-      <div class="step-dot">2</div>
-      <span>Solicitando ubicación</span>
-    </div>
-    <div class="step" id="s3">
-      <div class="step-dot">3</div>
-      <span>Validando zona permitida</span>
-    </div>
-    <div class="step" id="s4">
-      <div class="step-dot">4</div>
-      <span>Redirigiendo...</span>
-    </div>
+    <div class="step" id="s1"><div class="step-dot">1</div><span>Verificando sesión</span></div>
+    <div class="step" id="s2"><div class="step-dot">2</div><span>Solicitando ubicación</span></div>
+    <div class="step" id="s3"><div class="step-dot">3</div><span>Validando zona permitida</span></div>
+    <div class="step" id="s4"><div class="step-dot">4</div><span>Registrando acceso</span></div>
+    <div class="step" id="s5"><div class="step-dot">5</div><span>Redirigiendo...</span></div>
   </div>
 
   <div id="debug-box"></div>
@@ -244,16 +260,19 @@
   /* ═══════════════════════════════════════════
      ✏️  CONFIGURA AQUÍ TUS VALORES
   ═══════════════════════════════════════════ */
-  const TARGET_URL  = "https://soporteapp.gcalidad.com";   // ← URL destino
-  const ALLOWED_LAT = 37.916612;       // ← Latitud del lugar permitido
-  const ALLOWED_LNG = -4.718072;      // ← Longitud del lugar permitido
-  const RADIUS_M    = 200;             // ← Radio permitido en metros
+  const TARGET_URL      = "https://soporteapp.gcalidad.com";          // ← URL destino
+  const ALLOWED_LAT     = 37.900107;              // ← Latitud del lugar permitido
+  const ALLOWED_LNG     = -4.733545;             // ← Longitud del lugar permitido
+  const RADIUS_M        = 200;                    // ← Radio permitido en metros
+  const SESSION_MINUTES = 5;                      // ← Minutos de sesión válida
+  const WEBHOOK_URL     = "https://script.google.com/macros/s/AKfycbzW2r-cZLhoG7femt33oFJbUkBKdjZkfjDUxRK3NcYwzHdk65kaypsF5gAIIhY8Nw5xpA/exec";  // ← URL del Google Apps Script desplegado
 
-  // true = muestra info de depuración en pantalla (úsalo para probar)
-  // false = producción, sin info visible
+  // true = muestra panel de debug en pantalla | false = producción
   const DEBUG = true;
   /* ═══════════════════════════════════════════ */
 
+  const SESSION_KEY = "geo_session";
+  const SESSION_MS  = SESSION_MINUTES * 60 * 1000;
 
   const progressEl = document.getElementById('progress');
   const statusEl   = document.getElementById('status');
@@ -265,11 +284,10 @@
     el.className = 'step ' + state;
     if (state === 'done') dot.textContent = '✓';
     else if (state === 'fail') dot.textContent = '✗';
+    else if (state === 'skip') dot.textContent = '–';
   }
 
-  function setProgress(pct) {
-    progressEl.style.width = pct + '%';
-  }
+  function setProgress(pct) { progressEl.style.width = pct + '%'; }
 
   function setStatus(msg, cls) {
     statusEl.textContent = msg;
@@ -286,8 +304,7 @@
     if (!DEBUG) return;
     debugBox.style.display = 'block';
     debugBox.innerHTML = Object.entries(data)
-      .map(([k, v]) => `<div><b>${k}:</b> ${v}</div>`)
-      .join('');
+      .map(([k, v]) => `<div><b>${k}:</b> ${v}</div>`).join('');
   }
 
   function haversineDistance(lat1, lng1, lat2, lng2) {
@@ -300,15 +317,12 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
 
-  function delay(ms) {
-    return new Promise(r => setTimeout(r, ms));
-  }
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
   function getLocation() {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
-        reject({ code: 0, message: 'Geolocalización no soportada.' });
-        return;
+        reject({ code: 0 }); return;
       }
       navigator.geolocation.getCurrentPosition(resolve, reject, {
         enableHighAccuracy: true,
@@ -318,19 +332,94 @@
     });
   }
 
+  // ── Sesión localStorage ──
+  function getSession() {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw);
+      if (Date.now() < s.expiresAt) return s;
+      localStorage.removeItem(SESSION_KEY);
+      return null;
+    } catch { return null; }
+  }
+
+  function saveSession(data) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      ...data,
+      expiresAt: Date.now() + SESSION_MS
+    }));
+  }
+
+  function formatTimeLeft(ms) {
+    const m = Math.floor(ms / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    return `${m}m ${String(s).padStart(2,'0')}s restantes`;
+  }
+
+  // ── Registro en Google Sheets ──
+  async function logToSheets(data) {
+    if (!WEBHOOK_URL || WEBHOOK_URL === "TU_WEBHOOK_URL_AQUI") return;
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' }, // evita preflight CORS
+        body: JSON.stringify(data)
+      });
+    } catch (err) {
+      console.warn('No se pudo registrar en Sheets:', err);
+    }
+  }
+
+  // ── Flujo principal ──
   async function run() {
 
-    // ── Paso 1: Conexión ──
+    // Paso 1: Verificar sesión existente
     setStep('s1', 'active');
-    setStatus('Verificando conexión...');
+    setStatus('Verificando sesión...');
     setProgress(10);
-    await delay(700);
-    setStep('s1', 'done');
-    setProgress(25);
+    await delay(600);
 
-    // ── Paso 2: GPS ──
-    // Actualizamos la UI primero y esperamos 300ms para que el navegador
-    // pinte la pantalla ANTES de lanzar el popup de permiso de ubicación
+    const session = getSession();
+
+    if (session) {
+      // Sesión válida — saltar GPS y redirigir directamente
+      const remaining = session.expiresAt - Date.now();
+      setStep('s1', 'done');
+      setStep('s2', 'skip');
+      setStep('s3', 'skip');
+      setStep('s4', 'skip');
+      setProgress(90);
+
+      const badge = document.getElementById('session-badge');
+      const timer = document.getElementById('session-timer');
+      badge.style.display = 'block';
+      timer.textContent = formatTimeLeft(remaining);
+
+      // Actualizar el contador cada segundo
+      const interval = setInterval(() => {
+        const left = session.expiresAt - Date.now();
+        if (left <= 0) { clearInterval(interval); return; }
+        timer.textContent = formatTimeLeft(left);
+      }, 1000);
+
+      setStatus(`Sesión activa. Redirigiendo...`, 'ok');
+      setStep('s5', 'active');
+      await delay(1200);
+      setStep('s5', 'done');
+      setProgress(100);
+      await delay(400);
+      window.location.href = TARGET_URL;
+      return;
+    }
+
+    setStep('s1', 'done');
+    setProgress(20);
+
+    // Mostrar campo de nombre/ID
+    document.getElementById('user-section').style.display = 'block';
+
+    // Paso 2: GPS
     setStep('s2', 'active');
     setStatus('Toca "Permitir" cuando el navegador pida tu ubicación...', 'warn');
     setProgress(35);
@@ -341,8 +430,7 @@
       position = await getLocation();
     } catch (err) {
       setStep('s2', 'fail');
-      setStep('s3', 'fail');
-      setStep('s4', 'fail');
+      ['s3','s4','s5'].forEach(s => setStep(s, 'fail'));
       setProgress(40);
       const msgs = {
         1: 'Permiso denegado. Activa la ubicación en tu navegador e intenta de nuevo.',
@@ -355,26 +443,25 @@
     }
 
     setStep('s2', 'done');
-    setProgress(60);
+    setProgress(55);
 
-    // ── Paso 3: Validar zona ──
+    // Paso 3: Validar zona
     setStep('s3', 'active');
     setStatus('Validando zona permitida...');
     await delay(400);
 
     const { latitude, longitude, accuracy } = position.coords;
 
-    // Si el GPS devuelve (0,0) es una señal de que no funcionó correctamente
     if (latitude === 0 && longitude === 0) {
       setStep('s3', 'fail');
-      setStep('s4', 'fail');
-      setProgress(70);
-      showDebug({ '⚠️': 'GPS devolvió (0,0) — ubicación inválida' });
+      ['s4','s5'].forEach(s => setStep(s, 'fail'));
+      setProgress(60);
       showError('No se pudo obtener una ubicación válida. Verifica que el GPS esté activado.');
       return;
     }
 
     const distance = Math.round(haversineDistance(latitude, longitude, ALLOWED_LAT, ALLOWED_LNG));
+    const allowed  = distance <= RADIUS_M;
 
     showDebug({
       '📍 Tu ubicación':    `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
@@ -382,28 +469,54 @@
       '📏 Distancia':       `${distance} m`,
       '✅ Radio máximo':    `${RADIUS_M} m`,
       '📡 Precisión GPS':   `${Math.round(accuracy)} m`,
-      '🔍 Resultado':       distance <= RADIUS_M ? '✓ Dentro del área' : '✗ Fuera del área'
+      '🔍 Resultado':       allowed ? '✓ Dentro del área' : '✗ Fuera del área'
     });
 
-    // En debug dejamos más tiempo para leer los valores
-    await delay(DEBUG ? 2500 : 400);
+    await delay(DEBUG ? 2000 : 400);
 
-    if (distance > RADIUS_M) {
+    if (!allowed) {
       setStep('s3', 'fail');
-      setStep('s4', 'fail');
-      setProgress(75);
+      ['s4','s5'].forEach(s => setStep(s, 'fail'));
+      setProgress(65);
       showError(`Acceso denegado. Estás a ${distance} m del área permitida (máximo ${RADIUS_M} m).`);
       return;
     }
 
     setStep('s3', 'done');
-    setProgress(85);
+    setProgress(72);
 
-    // ── Paso 4: Redirigir ──
+    // Paso 4: Registrar en Google Sheets
     setStep('s4', 'active');
+    setStatus('Registrando acceso...');
+
+    const userName = document.getElementById('user-input').value.trim() || 'Anónimo';
+    const now      = new Date();
+    const datetime = now.toLocaleString('es-ES', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+
+    await logToSheets({
+      datetime,
+      user:      userName,
+      latitude:  latitude.toFixed(6),
+      longitude: longitude.toFixed(6),
+      accuracy:  Math.round(accuracy),
+      distance,
+      result:    'Acceso concedido'
+    });
+
+    // Guardar sesión en localStorage
+    saveSession({ user: userName, latitude, longitude });
+
+    setStep('s4', 'done');
+    setProgress(88);
+
+    // Paso 5: Redirigir
+    setStep('s5', 'active');
     setStatus('Acceso verificado. Redirigiendo...', 'ok');
     await delay(800);
-    setStep('s4', 'done');
+    setStep('s5', 'done');
     setProgress(100);
     await delay(400);
 
